@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('blogposts','Blog\PostController')->names('blog.posts');
+Route::resource('blog/posts','Blog\PostController')->names('blog.posts');
 
 //Route::resource('rest','RestTestController')->names('restTest');
 
@@ -25,8 +25,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Админка Блога
 $groupData = [
-    'manespace' => 'Blog\Admin',
-    'prefix'    => 'admin'
+    'namespace' => 'Blog\Admin',
+    'prefix'    => 'admin/blog'
 ];
 Route::group($groupData, function () {
     // BlogCategory
