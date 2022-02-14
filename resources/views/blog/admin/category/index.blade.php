@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-                    <a class="btn-primary" href="{{ route('blog.admin.category.create') }}">Добавить</a>
+                    <a class="btn btn-primary" href="{{ route('blog.admin.categories.create') }}">Добавить</a>
                 </nav>
                 <div class="card">
                     <div class="card-body">
@@ -23,12 +23,12 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>
-                                        <a href="{{ route('blog.admin.category.edit', $item->id) }}">
+                                        <a href="{{ route('blog.admin.categories.edit', $item->id) }}">
                                             {{ $item->title }}
                                         </a>
                                     </td>
                                     <td @if(in_array($item->parent_id, [0, 1])) style="color:#ccc" @endif>
-                                    {{ $item->parent_id }}{{-- $item->parentCstegory->title --}}
+                                        {{ $item->parent_id }}{{-- $item->parentCstegory->title --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -37,17 +37,18 @@
                     </div>
                 </div>
             </div>
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        You are logged in!
+        </div>
+        @if($paginator->total() > $paginator->count())
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            {{ $paginator->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 @endsection
