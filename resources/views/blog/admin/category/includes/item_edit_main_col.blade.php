@@ -1,5 +1,6 @@
 @php
-    @php /** @var \App\Models\BlogCategory $item */ @endphp
+    /** @var \App\Models\BlogCategory $item */
+@endphp
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="card">
@@ -41,12 +42,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="parent_id">Описание</label>
+                            <label for="description">Описание</label>
                             <textarea name="description"
                                       id="description"
                                       class="form-control"
-                                      rows="3"
-                            {{ $iten->description }}
+                                      rows="3">
+                            {{ $item->description }}
                             </textarea>
                         </div>
                     </div>
