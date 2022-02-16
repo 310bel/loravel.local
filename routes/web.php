@@ -17,6 +17,9 @@ Route::get('/', function () {
 
 Route::resource('blog/posts','Blog\PostController')->names('blog.posts');
 
+
+
+
 //Route::resource('rest','RestTestController')->names('restTest');
 
 Auth::routes();
