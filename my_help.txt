@@ -1,0 +1,347 @@
+Беру информацию с двух источников из видео который дал Андрей(связка phpstorm  и xampp) в нем идет установка из терминала шторма. но нужно настраивать чтобработал терминала https://www.youtube.com/watch?v=iG6RtfkkoKQ&ab_channel=DmitryAfanasyev
+Я взял за основу видео где связка шторма и open_server https://www.youtube.com/watch?v=4G5tYnqdo9o&ab_channel=WebForMySelf
+Установив свежий open_server через composer в терминале(в нужной папке домена) запускаем composer create-project laravel/laravel example-app это со страницы laravel https://laravel.com/docs/8.x
+cd /D d:\openserver
+cd /D d:\openserver\domains\loravel.local
+устанавливается laravel
+
+про composer
+https://habr.com/ru/post/439200/
+
+добавляю манипуляции чтобы работать не через терминал опенсервера
+Как добавить путь до PHP в переменную окружения PATH в Windows
+https://apache-windows.ru/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BF%D1%83%D1%82%D1%8C-%D0%B4%D0%BE-php-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-%D0%BE%D0%BA%D1%80/
+
+проверка версии laravel
+php artisan --version
+
+проверка версии php
+php -v
+
+
+из видео Андрея беру то что нужно установить Laravel Plugin в плагинах шторма. и в описании ссылка на Laravel IDE Helper Generator
+laravel-ide-helper командой composer require --dev barryvdh/laravel-ide-helper
+
+добавить в composer.json в скрипты
+  "post-update-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta"
+        ]
+
+Обновление зависимостей
+
+Команда для обновления установленных библиотек:
+> php composer.phar update
+в консоли набирается
+
+Установка laravel-debugbar
+https://github.com/barryvdh/laravel-debugbar
+composer require barryvdh/laravel-debugbar --dev
+
+ПРИ ПЕРЕНОСЕ проекта(возможно папка vendor не была включена)
+Установка compser локально
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+создается composer.phar
+
+желательно сохранить composer.json чтобы отдельно не ставить уже установленные пакеты (debugbar ide-helper)
+все пакеты устанавливаются и создается vendor/autoload.php
+
+php composer.phar install
+
+на сообщение можно проигнорировать, но лучше поставить php 7.2
+The Windows OneDrive folder is not supported on PHP versions below 7.2.23 and 7.3.10.
+Upgrade your PHP (7.1.33) to use this location with Composer.
+
+
+CREATE SCHEMA 'poligon_prototyype' DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+схема через запрос не создается
+поэтому создаю схему в ворбенче средствами интерфейса. тоесть правой кнопкой мыши.
+`poligon`
+
+редактируем файл
+.env
+
+создаем модели и сразу миграции моделей (ключ -m)
+$ php artisan make:model Models/BlogCategory -m
+$ php artisan make:model Models/BlogPost -m
+
+
+исправление для MariaDB
+в App\Providers\AppServiceProvider прописываем Schema::defaultStringLength(191); в public function boot()
+после он исправил на \Schema::defaultStringLength(191);
+
+либо альтернативный вариант(я не пробовал)
+Alternatively, you may enable the innodb_large_prefix option for your database. Refer to your database's documentation for instructions on how to properly enable this option.
+
+меняем D:\OpenServer\domains\loravel.local\database\migrations\2022_01_18_131217_create_blog_categories_table.php
+    public function up()
+    {
+        Schema::create('blog_categories', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('parent_id')->unsigned()->default(0);
+
+            $table->string('slug')->unique();
+            $table->string('title');
+            $table->text('description')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+меняем create_blog_posts_table
+    public function up()
+    {
+        Schema::create('blog_posts', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('category_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+
+            $table->string('slug')->unique();
+            $table->string('title');
+
+            $table->text('excetpt')->nullable();
+
+            $table->text('content_raw');
+            $table->text('content_html');
+
+            $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('category_id')->references('id')->on('blog_categories');
+            $table->index('is_published');
+        });
+    }
+
+использую комент в ютубе. меняю все что сказано:
+Если у кого-нибудь на Laravel 5.8 будет ошибка при миграции: "General error: 1215 Cannot add foreign key constraint". Поменяйте метод инкремента c increments на bigIncrements. И, следовательно, привязываемые id с integer на bigInteger.
+
+удалить лишние таблицы до миграции в базе
+выполняем миграцию
+php artisan migrate
+
+Создаем сиды
+php artisan make:seeder UserTableSeeder
+php artisan make:seeder BlogCategoriesTableSeeder
+
+изменяем D:\OpenServer\domains\loravel.local\database\seeds\DatabaseSeeder.php
+        $this->call(UsersTableSeeder::class);
+        $this->call(BlogCategoriesTableSeeder::class);
+        factory(\App\Models\BlogPost::class, 100)->create();
+
+		D:\OpenServer\domains\loravel.local\database\seeds\BlogCategoriesTableSeeder.php
+
+		    public function run()
+    {
+        $categories = [];
+        $cName = 'Без категории';
+        $categories[] = [
+            'title' => $cName,
+            'slug'=> str_slug($cName),
+            'parent_id' =>0,
+        ];
+
+        for ($i = 1; $i <= 10; $i++) {
+            $cName = 'Категория #'.$i;
+            $parentId = ($i > 4) ? rand(1,4) : 1;
+
+            $categories[] = [
+                'title' => $cName,
+                'slug'=> str_slug($cName),
+                'parent_id' =>$parentId,
+            ];
+        }
+
+        \DB::table('blog_categories')->insert($categories);
+    }
+
+	создаем
+	php artisan make:factory BlogPostFactory
+	и заполняем
+
+	$factory->define(\App\Models\BlogPost::class, function (Faker $faker) {
+    $title = $faker->sentence(rand(3,8),true);
+    $txt = $faker->realText(rand(1000,4000));
+    $isPublished = rand(1,5) > 1;
+
+    $createdAt = $faker->dateTimeBetween('-3 months', '-2 months');
+
+    $data = [
+        'category_id' => rand(1,11),
+        'user_id' => (rand(1,5)) == 5) ? 1 : 2,
+        'title' => $title,
+        'slug' => str_slug($title),
+        'except' => $faker->text(rand(40,100)),
+        'content_raw' => $txt,
+        'content_html' => $txt,
+        'ispublisched' => $isPublished,
+        'publisched_at' => $isPublished ? $faker->dateTimeBetween('-2 months', '-1 days'): null,
+        'created_at' => $createdAt,
+        'updated_at' => $createdAt,
+    ];
+
+    return $data;
+});
+
+заполняем
+D:\OpenServer\domains\loravel.local\database\seeds\UserTableSeeder.php
+
+    public function run(){
+        $data = [
+            [
+                'name' => 'Автор не известен',
+                'email' => 'autor_unknown@g.g',
+                'password' => bcrypt(str_random(16)),
+                ],
+                [
+                'name' => 'Автор',
+                'email' => 'autor1@g.g',
+                'password' => bcrypt(123123),
+],
+];
+    DB::table('users')->insert($data);
+    }
+
+Запуск сидов
+	php artisan db:seed
+
+Запуск конкректоного сида
+	php artisan db:seed --class=UserTableSeeder
+
+Зарендерить все
+	php artisan migrate:refresh --seed
+
+
+в Ларавел 5.8 str_slug сменили на Str::slug
+
+урок 9:
+Создаем REST-контроллера
+	php artisan make:controller RestTestController --reseource
+
+	редактируем	D:\OpenServer\domains\loravel.local\routes\web.php
+	Route::resource('rest','RestTestController')->names('restTest');
+
+посмотреть список всех маршрутов
+php artisan route:list
+	php artisan make:controller Blog/BaseController
+	php artisan make:controller Blog/PostController --reseource
+
+передаем объект $items взятый из базы в представление
+C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\PostController.php
+    public function index()
+    {
+        $items = BlogPost::all();
+
+        return view('blog.posts.index', compact('items'));
+    }
+
+При копировании проекта выкидывало ошибку failed to open stream: no such file or directory
+ЛЕЧЕНИЕ нашел- Try php artisan config:cache php artisan config:clear composer dump-autoload -o
+а именно:
+php artisan config:cache
+
+миграции не работали, помогло:
+php artisan config:clear
+
+Если composer уже есть и есть файл composer.json то в него нужно добавить строчки:
+
+"config": {
+        "preferred-install": "dist",
+        "disable-tls": true,
+        "secure-http": false
+}
+
+Laravel урок №10: [ Вывод всех статей. Новый маршрут ]
+
+C:\OpenServer\domains\laravel\resources\views\blog\posts\index.blade.php
+<table>
+    @foreach($items as $item)
+        <tr>
+            <td>{{ $item->id }}</td>
+            <td>{{ $item->title }}</td>
+            <td>{{ $item->created_at }}</td>
+        </tr>
+    @endforeach
+</table>
+
+Прописываем маршрут
+Route::resource('blogposts','Blog\PostController')->names('blog.posts');
+
+Laravel урок №11: [ Добавляем вёрстку "из коробки" ]
+делаем аутентификацию
+php artisan make:auth
+php artisan migrate
+
+из
+C:\OpenServer\domains\laravel\resources\views\auth\login.blade.php
+берем 2 верхние строчки
+@extends('layouts.app')
+
+@section('content')
+...
+@endsection
+и вставляем в
+C:\OpenServer\domains\laravel\resources\views\blog\posts\index.blade.php
+
+Laravel урок №12: [ Контроллер управления категориями ]
+
+C:\OpenServer\domains\laravel\routes\web.php
+// Админка Блога
+$groupData = [
+    'namespace' => 'Blog\Admin',
+    'prefix'    => 'admin'
+];
+Route::group($groupData, function () {
+    // BlogCategory
+    $methods = ['index', 'edit', 'store', 'update', 'create'];
+    Route::resource('categories', 'CategoryController')->only($methods) ->names('blog.admin.categories');
+});
+
+добавим контроллер
+php artisan make:controller Blog/Admin/CategoryController --resource
+
+Laravel урок №13: [ Управление категориями. Продолжение ]
+копируем C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\BaseController.php
+и вставляем в C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\BaseController.php
+чтобы C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\CategoryController.php наследовался от него
+
+
+урок 14 Страница всех категорий Админка
+http://laravel/admin/blog/categories
+создаем и пишем код в C:\OpenServer\domains\laravel\resources\views\blog\admin\categories\index.blade.php
+
+Маленький итог.
+Маршруты прописываем в \routes\web.php поясняющая картинка - Маршруты_контроллеры_Action
+после в самом контроллере PostController.php прописываем Action
+    public function index()
+    {
+        $items = BlogPost::all();
+        return view('blog.posts.index', compact('items'));
+    }
+тут сказано открыть файл view по пути laravel\resources\views\blog\posts\index.blade.php и запихнуть туда items
+
+урок 15 Пагинация
+
+урок 16 Страница редактирования категории
+создаем и пишем код в C:\OpenServer\domains\laravel\resources\views\blog\admin\categories\edit.blade.php
+
+урок 17 Продолжение Страница редактирования категории
+во вьехе идет отсылка на две еще вьюхи resources/views/blog/admin/categories/includes/item_edit_add_col.blade.php и resources/views/blog/admin/categories/includes/item_edit_main_col.blade.php
+и пишем код в них
+
+урок 19 Изменение обновление категории 2
+редактируем. изменяем метод public function update(Request $request, $id)
+C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\CategoryController.php
+
+редактируем edit.blade.php
