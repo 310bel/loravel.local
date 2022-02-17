@@ -52,6 +52,7 @@ class CategoryController extends BaseController
     {
         $item = BlogCategory::findOrFail($id);
         $categoryList = BlogCategory::all();
+
         return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
 
@@ -64,7 +65,9 @@ class CategoryController extends BaseController
      */
     public function update(Request $request, $id)
     {
+//        dd(__METHOD__, $id, $request->all(), $id);
         $item = BlogCategory::find($id);
+        dd($item);
         if (empty($item)) {
             return back()
                 ->withErrors(['msg' => "Запись id[{$id}] не найдена"])

@@ -345,3 +345,8 @@ http://laravel/admin/blog/categories
 C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\CategoryController.php
 
 редактируем edit.blade.php
+
+меня пароль в workbench чтоб заходить в phpstorm
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
+
+ошибка гдето в 19 уроке вначале
