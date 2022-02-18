@@ -372,4 +372,4 @@ class BlogCategory extends Model
 создаем надстройку(контроллер)
 	php artisan make:request BlogCategoryUpdateRequest
 	в него переносим валидацию данных
-
+тест
