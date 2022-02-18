@@ -349,4 +349,22 @@ C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\CategoryController
 меня пароль в workbench чтоб заходить в phpstorm
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
 
-ошибка гдето в 19 уроке вначале
+При редактировании категорий. нажав кнопку сохранить. появляется ошибка:
+Add [_method] to fillable property to allow mass assignment on [App\Models\BlogCategory].
+вылечил нагуглив:(невнимательно смотрел видео, все он обьясняет)
+добавив в код app/Models/BlogCategory.php
+
+Предпочтительный вариант. При использовании методов fill() и др., необходимо определить поля, которым разрешено массовое присвоение:
+
+class BlogCategory extends Model
+{
+    use SoftDeletes;
+    protected $fillable = [
+        'title',
+        'slug',
+        'parent_id',
+        'description',
+    ];
+}
+
+
