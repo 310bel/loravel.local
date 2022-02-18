@@ -367,4 +367,9 @@ class BlogCategory extends Model
     ];
 }
 
+урок 22 Валидация данных 2 Продолжение
+
+создаем надстройку(контроллер)
+	php artisan make:request BlogCategoryUpdateRequest
+	в него переносим валидацию данных
 
