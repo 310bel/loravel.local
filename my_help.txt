@@ -373,3 +373,4 @@ class BlogCategory extends Model
 	php artisan make:request BlogCategoryUpdateRequest
 	в него переносим валидацию данных
 тест
+000000
