@@ -372,6 +372,12 @@ class BlogCategory extends Model
 создаем надстройку(контроллер)
 	php artisan make:request BlogCategoryUpdateRequest
 	в него переносим валидацию данных
-тест
-апааа
-4555
+
+Также напомню, что если какие-либо файлы уже были проиндексированы git, до создания .ignore, их можно удалить следующей командой:
+git rm -r --cached .idea
+
+Удалить все проиндексированные файлы
+git rm -r -f --cached .
+Запустить индексацию заново
+git add .
+
