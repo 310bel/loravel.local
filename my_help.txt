@@ -381,4 +381,6 @@ git rm -r -f --cached .
 Запустить индексацию заново
 git add .
 
+Имя пользователя Git
+git config --global user.name "John Doe"
 
