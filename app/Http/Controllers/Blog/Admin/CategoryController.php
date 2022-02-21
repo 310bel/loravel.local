@@ -28,12 +28,7 @@ class CategoryController extends BaseController
      */
     public function create()
     {
-        {
-            $item = new BlogCategory();
-            $categoryList = BlogCategory::all();
-
-            return view('blog.admin.categories.edit', compact('item', 'categoryList'));
-        }
+        dd(__METHOD__);
     }
 
     /**
@@ -42,27 +37,11 @@ class CategoryController extends BaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BlogCategoryUpdateRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->input();
-        if (empty($data['slug'])) {
-            $data['slug'] = str_slug($data['title']);
-        }
-
-        // Создаст обьект но не добавит в БД
-        $item = new BlogCategory($data);
-        dd($item);
-        $item->seve();
-
-        if ($item) {
-            return  redirect()->route('blog.admin.categories.edit', [$item->it])
-                ->with(['success' => 'Успешно сохранено']);
-        } else {
-            return back()
-                ->withErrors(['msg' => 'Ошибка сохранения'])
-                ->withInput();
-        }
+        //
     }
+
 
     /**
      * Show the form for editing the specified resource.
