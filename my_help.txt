@@ -373,3 +373,5 @@ class BlogCategory extends Model
 	php artisan make:request BlogCategoryUpdateRequest
 	в него переносим валидацию данных
 
+Имя пользователя Git
+git config --global user.name "John Doe"
