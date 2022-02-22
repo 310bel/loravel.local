@@ -52,6 +52,7 @@ php -r "unlink('composer-setup.php');"
 желательно сохранить composer.json чтобы отдельно не ставить уже установленные пакеты (debugbar ide-helper)
 все пакеты устанавливаются и создается vendor/autoload.php
 
+php composer.phar update
 php composer.phar install
 
 на сообщение можно проигнорировать, но лучше поставить php 7.2
@@ -383,4 +384,8 @@ git add .
 
 Имя пользователя Git
 git config --global user.name "John Doe"
+
+урок 24 Добавление категории Продолжение
+	php artisan make:request BlogCategoryCreateRequest
+
 

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
+
 
 class CategoryController extends BaseController
 {
@@ -42,20 +43,25 @@ class CategoryController extends BaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BlogCategoryUpdateRequest $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
         $data = $request->input();
         if (empty($data['slug'])) {
             $data['slug'] = str_slug($data['title']);
+
         }
 
         // Создаст обьект но не добавит в БД
-        $item = new BlogCategory($data);
-        dd($item);
-        $item->seve();
+        /*        $item = new BlogCategory($data);
+                dd($item);
+                $item->seve();*/
+
+        // Создаст обьект и добавит в БД
+        $item = (new BlogCategory())->create($data);
+  //      dd($item);
 
         if ($item) {
-            return  redirect()->route('blog.admin.categories.edit', [$item->it])
+            return redirect()->route('blog.admin.categories.edit', [$item->it])
                 ->with(['success' => 'Успешно сохранено']);
         } else {
             return back()
