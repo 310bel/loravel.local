@@ -48,20 +48,20 @@ class CategoryController extends BaseController
         $data = $request->input();
         if (empty($data['slug'])) {
             $data['slug'] = str_slug($data['title']);
-
         }
+ //       dd($data);
 
         // Создаст обьект но не добавит в БД
-        /*        $item = new BlogCategory($data);
+/*                $item = new BlogCategory($data);
                 dd($item);
                 $item->seve();*/
 
         // Создаст обьект и добавит в БД
         $item = (new BlogCategory())->create($data);
-  //      dd($item);
+   //     dd($item);
 
         if ($item) {
-            return redirect()->route('blog.admin.categories.edit', [$item->it])
+            return redirect()->route('blog.admin.categories.edit', [$item->id])
                 ->with(['success' => 'Успешно сохранено']);
         } else {
             return back()
@@ -113,11 +113,12 @@ class CategoryController extends BaseController
                 ->withErrors(['msg' => "Запись id[{$id}] не найдена"])
                 ->withInput();
         }
+$data = $request->all();
+        if (empty($data['slug'])) {
+            $data['slug'] = str_slug($data['title']);
+        }
 
-        $data = $request->all();
-        $result = $item
-            ->fill($data)
-            ->save();
+        $result = $item->update($data);
 
         if ($result) {
             return redirect()
