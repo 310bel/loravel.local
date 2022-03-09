@@ -37,7 +37,7 @@ laravel-ide-helper командой composer require --dev barryvdh/laravel-ide-
 
 Установка laravel-debugbar
 https://github.com/barryvdh/laravel-debugbar
-composer require barryvdh/laravel-debugbar --dev
+php composer.phar require barryvdh/laravel-debugbar --dev
 
 ПРИ ПЕРЕНОСЕ проекта(возможно папка vendor не была включена)
 Установка compser локально
@@ -347,7 +347,7 @@ C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\Admin\CategoryController
 
 редактируем edit.blade.php
 
-меня пароль в workbench чтоб заходить в phpstorm
+поменять пароль в workbench чтоб заходить в phpstorm
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');
 
 При редактировании категорий. нажав кнопку сохранить. появляется ошибка:
