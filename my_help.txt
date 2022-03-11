@@ -215,28 +215,28 @@ D:\OpenServer\domains\loravel.local\database\seeds\UserTableSeeder.php
     }
 
 Запуск сидов
-	php artisan db:seed
+php artisan db:seed
 
 Запуск конкректоного сида
-	php artisan db:seed --class=UserTableSeeder
+php artisan db:seed --class=UserTableSeeder
 
 Зарендерить все
-	php artisan migrate:refresh --seed
+php artisan migrate:refresh --seed
 
 
 в Ларавел 5.8 str_slug сменили на Str::slug
 
 урок 9:
 Создаем REST-контроллера
-	php artisan make:controller RestTestController --reseource
+php artisan make:controller RestTestController --resource
 
 	редактируем	D:\OpenServer\domains\loravel.local\routes\web.php
 	Route::resource('rest','RestTestController')->names('restTest');
 
 посмотреть список всех маршрутов
 php artisan route:list
-	php artisan make:controller Blog/BaseController
-	php artisan make:controller Blog/PostController --reseource
+php artisan make:controller Blog/BaseController
+php artisan make:controller Blog/PostController --resource
 
 передаем объект $items взятый из базы в представление
 C:\OpenServer\domains\laravel\app\Http\Controllers\Blog\PostController.php

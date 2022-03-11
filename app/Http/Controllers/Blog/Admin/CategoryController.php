@@ -77,7 +77,7 @@ class CategoryController extends BaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, BlogCategoryRepository, $categoryRepository)
+    public function edit($id, BlogCategoryRepository $categoryRepository)
     {
 //        $item = BlogCategory::findOrFail($id);
 //        $categoryList = BlogCategory::all();
